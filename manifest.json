@@ -1,0 +1,10 @@
+
+{
+  "name": "Licznik czasu pracy",
+  "short_name": "WorkTimer",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#071023",
+  "theme_color": "#7c5cff",
+  "icons": []
+}
