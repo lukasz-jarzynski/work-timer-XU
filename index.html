@@ -1,0 +1,113 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Licznik czasu pracy</title>
+<style>
+:root{
+  --bg:#0f1720;
+  --card:#0b1220;
+  --muted:#9aa4b2;
+  --accent:#7c5cff;
+  --accent-2:#00d4ff;
+  --success:#22c55e;
+  --danger:#ff6b6b;
+  --glass: rgba(255,255,255,0.04);
+  --radius:14px;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0; font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(180deg,#071023 0%, #081226 60%);
+  color:#e6eef6; -webkit-font-smoothing:antialiased; padding:18px;}
+.header{display:flex; gap:12px; align-items:center; justify-content:space-between; margin-bottom:14px;}
+.app-title{display:flex; gap:12px; align-items:center;}
+.logo{width:44px; height:44px; border-radius:10px; background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:grid; place-items:center; box-shadow: 0 6px 18px rgba(92,64,255,0.18);
+  font-weight:700; color:white;}
+.title-text{font-size:18px; font-weight:600;}
+.container{max-width:980px; margin:0 auto;}
+.grid{display:grid; grid-template-columns: 1fr; gap:14px;}
+@media(min-width:900px){ .grid{grid-template-columns: 1fr 380px;} }
+.card{background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:var(--radius); padding:14px; box-shadow: 0 8px 30px rgba(2,6,23,0.6); border:1px solid rgba(255,255,255,0.03);}
+.form-row{display:flex; gap:10px; align-items:center;}
+.form-row > *{flex:1}
+.input, select, textarea{width:100%; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,0.04);
+  background:var(--glass); color:var(--muted); font-weight:600;}
+textarea{min-height:66px; color: #eaf2ff; resize:vertical}
+.btn{display:inline-flex; gap:8px; align-items:center; justify-content:center; padding:10px 12px; border-radius:12px; border:none; cursor:pointer; font-weight:700;}
+.btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#031126; box-shadow: 0 8px 24px rgba(124,92,255,0.16);}
+.table{width:100%; border-collapse:collapse; margin-top:10px;}
+.table th{font-weight:700; color:var(--muted); text-align:left; font-size:12px; padding:8px 6px; text-transform:uppercase;}
+.table td{padding:10px 6px; border-top:1px solid rgba(255,255,255,0.02); vertical-align:middle; font-weight:600; color:#eaf2ff}
+.row-actions button{border:none; background:transparent; cursor:pointer; font-size:18px; margin-right:6px; color:#ff6b6b;}
+.details-toggle{cursor:pointer; color:var(--accent-2); font-weight:700; font-size:13px; margin-top:6px;}
+.hidden{display:none;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="app-title">
+      <div class="logo">WT</div>
+      <div><div class="title-text">Licznik czasu pracy</div></div>
+    </div>
+  </div>
+  <div class="grid">
+    <div>
+      <div class="card">
+        <div class="form-row" style="margin-bottom:8px;">
+          <input id="date" type="date" class="input" />
+          <select id="start" class="input"></select>
+          <select id="end" class="input"></select>
+        </div>
+        <label style="font-size:13px; color:var(--muted)">Notatka</label>
+        <textarea id="note" class="input" placeholder="Np. zadania, lokalizacja..."></textarea>
+        <div class="form-row" style="margin-top:8px;">
+          <input id="bonus" type="number" class="input" placeholder="Premia (PLN)" step="0.01" />
+          <button id="addBtn" class="btn btn-primary" onclick="addEntry()">Dodaj wpis</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <strong>Wpisy</strong>
+        <table class="table" id="entriesTable" aria-live="polite">
+          <thead>
+            <tr><th>Data</th><th>Godziny</th><th>h</th><th>Notatka</th><th>Premia</th><th></th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div>
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <strong id="monthTitle">Podsumowanie</strong>
+          <select id="monthSelect" style="max-width:180px" onchange="onMonthChange()"></select>
+        </div>
+        <div id="nominalInfo" style="margin-top:8px; color:var(--muted)"></div>
+        <div id="summary" style="margin-top:12px"></div>
+      </div>
+
+      <div class="card">
+        <details id="settingsDetails">
+          <summary class="details-toggle">Ustawienia</summary>
+          <label style="margin-top:8px">Stawka za godzinę (PLN)</label>
+          <input id="rate" type="number" class="input" step="0.01" />
+          <label style="margin-top:8px">Na konto (PLN)</label>
+          <input id="toAccount" type="number" class="input" step="0.01" />
+          <div style="display:flex; gap:8px; margin-top:10px;">
+            <button class="btn btn-primary" style="flex:1" onclick="saveSettings()">Zapisz</button>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
